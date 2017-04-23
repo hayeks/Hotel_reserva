@@ -1,0 +1,556 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.4.10
+-- Dumped by pg_dump version 9.4.10
+-- Started on 2017-04-22 20:31:32
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- TOC entry 1 (class 3079 OID 11855)
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 2063 (class 0 OID 0)
+-- Dependencies: 1
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 176 (class 1259 OID 24598)
+-- Name: cliente; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE cliente (
+    id_persona integer NOT NULL,
+    codigo_cliente text
+);
+
+
+ALTER TABLE cliente OWNER TO postgres;
+
+--
+-- TOC entry 180 (class 1259 OID 24635)
+-- Name: consumo; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE consumo (
+    id_reserva integer,
+    id_producto integer,
+    cantidad numeric(7,2),
+    precio_venta numeric(7,2),
+    estado text,
+    id_consumo integer NOT NULL
+);
+
+
+ALTER TABLE consumo OWNER TO postgres;
+
+--
+-- TOC entry 186 (class 1259 OID 24690)
+-- Name: consumo_id_consumo_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE consumo_id_consumo_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE consumo_id_consumo_seq OWNER TO postgres;
+
+--
+-- TOC entry 2064 (class 0 OID 0)
+-- Dependencies: 186
+-- Name: consumo_id_consumo_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE consumo_id_consumo_seq OWNED BY consumo.id_consumo;
+
+
+--
+-- TOC entry 173 (class 1259 OID 24576)
+-- Name: habitacion; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE habitacion (
+    piso text,
+    descripcion text,
+    caracteristica text,
+    precio_diario numeric(7,2),
+    tipo_habitacion text,
+    estado text,
+    id_habitacion integer NOT NULL,
+    numero text
+);
+
+
+ALTER TABLE habitacion OWNER TO postgres;
+
+--
+-- TOC entry 181 (class 1259 OID 24643)
+-- Name: habitacion_id_habitacion_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE habitacion_id_habitacion_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE habitacion_id_habitacion_seq OWNER TO postgres;
+
+--
+-- TOC entry 2065 (class 0 OID 0)
+-- Dependencies: 181
+-- Name: habitacion_id_habitacion_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE habitacion_id_habitacion_seq OWNED BY habitacion.id_habitacion;
+
+
+--
+-- TOC entry 179 (class 1259 OID 24627)
+-- Name: pago; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE pago (
+    id_reserva integer NOT NULL,
+    tipo_comprobacion text,
+    num_comprobacion text,
+    igv numeric(4,2),
+    total_pago numeric(9,2),
+    fecha_emision date,
+    fecha_pago date,
+    estado text,
+    id_pago integer NOT NULL
+);
+
+
+ALTER TABLE pago OWNER TO postgres;
+
+--
+-- TOC entry 185 (class 1259 OID 24680)
+-- Name: pago_id_pago_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE pago_id_pago_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE pago_id_pago_seq OWNER TO postgres;
+
+--
+-- TOC entry 2066 (class 0 OID 0)
+-- Dependencies: 185
+-- Name: pago_id_pago_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE pago_id_pago_seq OWNED BY pago.id_pago;
+
+
+--
+-- TOC entry 175 (class 1259 OID 24590)
+-- Name: persona; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE persona (
+    nombre text,
+    apaterno text,
+    amaterno text,
+    tipo_documento text,
+    numero_documento text,
+    direccion text,
+    telefono text,
+    email text,
+    id_persona integer NOT NULL
+);
+
+
+ALTER TABLE persona OWNER TO postgres;
+
+--
+-- TOC entry 182 (class 1259 OID 24653)
+-- Name: persona_id_persona_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE persona_id_persona_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE persona_id_persona_seq OWNER TO postgres;
+
+--
+-- TOC entry 2067 (class 0 OID 0)
+-- Dependencies: 182
+-- Name: persona_id_persona_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE persona_id_persona_seq OWNED BY persona.id_persona;
+
+
+--
+-- TOC entry 177 (class 1259 OID 24604)
+-- Name: producto; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE producto (
+    nombre text,
+    descripcion text,
+    unidad_medida text,
+    precio_venta numeric(7,0),
+    id_producto integer NOT NULL
+);
+
+
+ALTER TABLE producto OWNER TO postgres;
+
+--
+-- TOC entry 183 (class 1259 OID 24662)
+-- Name: producto_id_producto_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE producto_id_producto_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE producto_id_producto_seq OWNER TO postgres;
+
+--
+-- TOC entry 2068 (class 0 OID 0)
+-- Dependencies: 183
+-- Name: producto_id_producto_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE producto_id_producto_seq OWNED BY producto.id_producto;
+
+
+--
+-- TOC entry 178 (class 1259 OID 24619)
+-- Name: reserva; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE reserva (
+    id_habitacion integer NOT NULL,
+    id_cliente integer NOT NULL,
+    id_trabajador integer NOT NULL,
+    tipo_reserva text,
+    costo_alojamiento numeric,
+    observacion text,
+    estado text,
+    fecha_reserva text,
+    fecha_ingreso text,
+    fecha_salida text,
+    id_reserva integer NOT NULL
+);
+
+
+ALTER TABLE reserva OWNER TO postgres;
+
+--
+-- TOC entry 184 (class 1259 OID 24671)
+-- Name: reserva_id_reserva_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE reserva_id_reserva_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE reserva_id_reserva_seq OWNER TO postgres;
+
+--
+-- TOC entry 2069 (class 0 OID 0)
+-- Dependencies: 184
+-- Name: reserva_id_reserva_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE reserva_id_reserva_seq OWNED BY reserva.id_reserva;
+
+
+--
+-- TOC entry 174 (class 1259 OID 24584)
+-- Name: trabajador; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE trabajador (
+    id_persona integer NOT NULL,
+    sueldo numeric(7,0),
+    acceso text,
+    login text,
+    pass text,
+    estado text
+);
+
+
+ALTER TABLE trabajador OWNER TO postgres;
+
+--
+-- TOC entry 1932 (class 2604 OID 24692)
+-- Name: id_consumo; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY consumo ALTER COLUMN id_consumo SET DEFAULT nextval('consumo_id_consumo_seq'::regclass);
+
+
+--
+-- TOC entry 1927 (class 2604 OID 24645)
+-- Name: id_habitacion; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY habitacion ALTER COLUMN id_habitacion SET DEFAULT nextval('habitacion_id_habitacion_seq'::regclass);
+
+
+--
+-- TOC entry 1931 (class 2604 OID 24682)
+-- Name: id_pago; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY pago ALTER COLUMN id_pago SET DEFAULT nextval('pago_id_pago_seq'::regclass);
+
+
+--
+-- TOC entry 1928 (class 2604 OID 24655)
+-- Name: id_persona; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY persona ALTER COLUMN id_persona SET DEFAULT nextval('persona_id_persona_seq'::regclass);
+
+
+--
+-- TOC entry 1929 (class 2604 OID 24664)
+-- Name: id_producto; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY producto ALTER COLUMN id_producto SET DEFAULT nextval('producto_id_producto_seq'::regclass);
+
+
+--
+-- TOC entry 1930 (class 2604 OID 24673)
+-- Name: id_reserva; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY reserva ALTER COLUMN id_reserva SET DEFAULT nextval('reserva_id_reserva_seq'::regclass);
+
+
+--
+-- TOC entry 2045 (class 0 OID 24598)
+-- Dependencies: 176
+-- Data for Name: cliente; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY cliente (id_persona, codigo_cliente) FROM stdin;
+3	1
+5	2
+\.
+
+
+--
+-- TOC entry 2049 (class 0 OID 24635)
+-- Dependencies: 180
+-- Data for Name: consumo; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY consumo (id_reserva, id_producto, cantidad, precio_venta, estado, id_consumo) FROM stdin;
+6	2	2.00	23.00	Aceptado	1
+7	2	1.00	23.00	Aceptado	2
+8	6	2.00	120.00	Aceptado	3
+9	7	5.00	60.00	Aceptado	4
+8	7	2.00	60.00	Aceptado	5
+\.
+
+
+--
+-- TOC entry 2070 (class 0 OID 0)
+-- Dependencies: 186
+-- Name: consumo_id_consumo_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('consumo_id_consumo_seq', 5, true);
+
+
+--
+-- TOC entry 2042 (class 0 OID 24576)
+-- Dependencies: 173
+-- Data for Name: habitacion; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY habitacion (piso, descripcion, caracteristica, precio_diario, tipo_habitacion, estado, id_habitacion, numero) FROM stdin;
+1	Habitacion Doble	Amplia Habitacion para 2 personas 	600.00	Matrimonimal	Disponible	3	2
+1	habitacion presidencial	Habiacion tipo suit	1000.00	Familiar	Disponible	5	4
+1	Habitacion Failiar 	Con cama para ños adicional	700.00	Familiar	Disponible	4	3
+2	Habitacion matrimonial	Una Cama, Nevera	3500.00	Matrimonimal	Disponible	6	4
+1	Habitacion simple serca de la piscina	Tiene una cama de una plaza, servicio a la habitacion 	555.00	Individual	Disponible	1	1
+\.
+
+
+--
+-- TOC entry 2071 (class 0 OID 0)
+-- Dependencies: 181
+-- Name: habitacion_id_habitacion_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('habitacion_id_habitacion_seq', 6, true);
+
+
+--
+-- TOC entry 2048 (class 0 OID 24627)
+-- Dependencies: 179
+-- Data for Name: pago; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY pago (id_reserva, tipo_comprobacion, num_comprobacion, igv, total_pago, fecha_emision, fecha_pago, estado, id_pago) FROM stdin;
+5	Boleta	32323	22.22	33334.00	2017-04-14	2017-04-07	\N	1
+6	Factura	3200	20.33	1046.00	2017-04-15	2017-04-22	\N	3
+8	Factura	23	12.00	3740.00	2017-04-04	2017-04-04	\N	4
+9	Factura	65	12.00	3800.00	2017-04-22	2017-04-22	\N	5
+8	Factura	222	12.00	3860.00	2017-04-21	2017-04-21	\N	6
+\.
+
+
+--
+-- TOC entry 2072 (class 0 OID 0)
+-- Dependencies: 185
+-- Name: pago_id_pago_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('pago_id_pago_seq', 6, true);
+
+
+--
+-- TOC entry 2044 (class 0 OID 24590)
+-- Dependencies: 175
+-- Data for Name: persona; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY persona (nombre, apaterno, amaterno, tipo_documento, numero_documento, direccion, telefono, email, id_persona) FROM stdin;
+deliberrth	santiago	collado	DNI	23445432564	fdfdfdf	34343434	ddfdfdf	4
+Carlos	Pacheco	Suarez	DNI	402254266589	calle 2 # 31 entre calle 3 y calle 4	8092376666	carlos9@hotmail.com	3
+Gregory 	Evangelista	Rodriguez	DNI	30256498726	Calle 3 #22 entre J y k	8493546666	evansofhotmail.comt	5
+\.
+
+
+--
+-- TOC entry 2073 (class 0 OID 0)
+-- Dependencies: 182
+-- Name: persona_id_persona_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('persona_id_persona_seq', 5, true);
+
+
+--
+-- TOC entry 2046 (class 0 OID 24604)
+-- Dependencies: 177
+-- Data for Name: producto; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY producto (nombre, descripcion, unidad_medida, precio_venta, id_producto) FROM stdin;
+Agua Dasani	Agua embotellada	LT	60	2
+Cerveza Presidete	Botellas pequeña	LT	100	3
+Pechuga de pollo	Pechuga de pollo a la plancha acompañada de guarnicion	KG	350	4
+Aroz Blanco	Porcion Individual	UND	100	5
+Moro 	Moro de avichuelas negras	UND	120	6
+Jugos Naturales	Cajas 200 Ml	UND	60	7
+\.
+
+
+--
+-- TOC entry 2074 (class 0 OID 0)
+-- Dependencies: 183
+-- Name: producto_id_producto_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('producto_id_producto_seq', 7, true);
+
+
+--
+-- TOC entry 2047 (class 0 OID 24619)
+-- Dependencies: 178
+-- Data for Name: reserva; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY reserva (id_habitacion, id_cliente, id_trabajador, tipo_reserva, costo_alojamiento, observacion, estado, fecha_reserva, fecha_ingreso, fecha_salida, id_reserva) FROM stdin;
+1	3	4	Reserva	3434	\N	Pagada	2017-04-13	2017-04-11	2017-04-15	7
+4	5	4	Reserva	3500	\N	Pagada	2017-04-01	2017-04-27	2017-04-28	9
+1	5	4	Alquiler	3500	\N	Pagada	2017-04-01	2017-04-01	2017-04-04	8
+\.
+
+
+--
+-- TOC entry 2075 (class 0 OID 0)
+-- Dependencies: 184
+-- Name: reserva_id_reserva_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('reserva_id_reserva_seq', 9, true);
+
+
+--
+-- TOC entry 2043 (class 0 OID 24584)
+-- Dependencies: 174
+-- Data for Name: trabajador; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY trabajador (id_persona, sueldo, acceso, login, pass, estado) FROM stdin;
+4	343434	Administrador	deli	123	Activado
+\.
+
+
+--
+-- TOC entry 2062 (class 0 OID 0)
+-- Dependencies: 6
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+-- Completed on 2017-04-22 20:31:32
+
+--
+-- PostgreSQL database dump complete
+--
+
